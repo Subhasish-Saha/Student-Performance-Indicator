@@ -1,31 +1,35 @@
-from setuptools import find_packages, setup
+from setuptools import find_packages,setup
 from typing import List
+import os
 
-HYPEN_E_DOT = '-e .'
+def get_requirements()->List[str]:
 
-def get_requirements(file_path:str)->List[str]:
-    '''
-    This function will return the list of requirements.
-    '''
-    try:
-        requirements = []
-        with open(file_path) as f:
-            requirements = f.readlines()
-            requirements = [req.replace("\n","") for req in requirements]
+    """
+    This function will return the list of requirements
+    """
+    requirement_list:List[str]=[]
+    path = os.path.abspath('requirements.txt')
 
-            if HYPEN_E_DOT in requirements:
-                requirements.remove(HYPEN_E_DOT)
+    with open(path) as file:
+        lines = file.readlines()
 
-        return requirements
-    
-    except Exception as e:
-        print(f'Error : {e}')
+    for line in lines:
+        if line != '-e .' and line != '-e .\n':
+            if line.endswith('\n'):
+                requirement_list.append(line[:-1])
+            else:
+                requirement_list.append(line)
 
-    setup(
-        name='project2',
-        version='0.0.1',
-        author='Subhasish-Saha',
-        author_email='subhasishsaha007@gmail.com',
-        packages=find_packages(),
-        install_requires = get_requirements('requirements.txt')
-    )
+    return requirement_list
+
+
+setup(
+    name = "project-2",
+    version = "0.0.1",
+    author = "subhasish",
+    author_email = "subhasishsaha007@gmail.com",
+    packages = find_packages(),
+    install_requires=get_requirements(),
+)
+
+# python setup.py
