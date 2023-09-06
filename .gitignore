@@ -133,5 +133,4 @@ dmypy.json
 #ignore the log files
 *.log
 
-
-Notebook/catboost_info/
+catboost_info/
