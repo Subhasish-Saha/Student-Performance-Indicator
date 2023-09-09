@@ -134,3 +134,4 @@ dmypy.json
 *.log
 
 catboost_info/
+.vscode/settings.json
