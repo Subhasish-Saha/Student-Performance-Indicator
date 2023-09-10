@@ -11,23 +11,44 @@ from src.logger import logging
 
 def save_object(file_path: str, obj: object) -> None:
     """
-        Save the given object to a file at the specified file path.
+    Save the given object to a file at the specified file path.
 
-        Args:
-            file_path (str): The path to the file where the object will be saved.
-            obj (object): The object to be saved.
+    Args:
+        file_path (str): The path to the file where the object will be saved.
+        obj (object): The object to be saved.
 
-        Raises:
-            Custom_Exception: If an error occurs during the saving process, a Custom_Exception is raised.
+    Raises:
+        Custom_Exception: If an error occurs during the saving process, a Custom_Exception is raised.
 
-        Note:
-            This function creates any necessary directories in the file path if they don't exist.
+    Note:
+        This function creates any necessary directories in the file path if they don't exist.
     """
     try:
         dir_path = os.path.dirname(file_path)
         os.makedirs(dir_path, exist_ok=True)
         with open(file_path, "wb") as file_obj:
             pickle.dump(obj, file_obj)
+
+    except Exception as e:
+        raise Custom_Exception(e, sys)
+
+
+def load_object(file_path: str) -> pickle:
+    """
+    Load an object from a file.
+
+    Args:
+        file_path (str): The path to the file from which to load the object.
+
+    Returns:
+        object: The loaded object.
+
+    Raises:
+        Custom_Exception: If an error occurs while loading the object, a Custom_Exception is raised.
+    """
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
 
     except Exception as e:
         raise Custom_Exception(e, sys)
@@ -42,27 +63,27 @@ def evaluate_models(
     params: dict,
 ) -> float:
     """
-        Evaluate machine learning models using hyperparameter tuning and return a dictionary
-        of model names and their corresponding R2 scores on the test data.
+    Evaluate machine learning models using hyperparameter tuning and return a dictionary
+    of model names and their corresponding R2 scores on the test data.
 
-        Parameters:
-            X_train (np.array): The training data features.
-            y_train (np.array): The training data labels.
-            X_test (np.array): The test data features.
-            y_test (np.array): The test data labels.
-            models (dict): A dictionary of machine learning models, where keys are model names
-                        and values are model objects.
-            params (dict): A dictionary specifying hyperparameter search spaces for each model.
+    Parameters:
+        X_train (np.array): The training data features.
+        y_train (np.array): The training data labels.
+        X_test (np.array): The test data features.
+        y_test (np.array): The test data labels.
+        models (dict): A dictionary of machine learning models, where keys are model names
+                    and values are model objects.
+        params (dict): A dictionary specifying hyperparameter search spaces for each model.
 
-        Returns:
-            dict: A dictionary containing model names as keys and their R2 scores on the test data as values.
+    Returns:
+        dict: A dictionary containing model names as keys and their R2 scores on the test data as values.
 
-        The function performs the following steps:
-        1. Iterates through the provided list of models.
-        2. Performs hyperparameter tuning for each model using GridSearchCV with cross-validation.
-        3. Trains each model with the best hyperparameters on the training data.
-        4. Calculates and stores the R2 score of each model on both the training and test data.
-        5. Returns a dictionary where model names are keys and R2 scores on the test data are values.
+    The function performs the following steps:
+    1. Iterates through the provided list of models.
+    2. Performs hyperparameter tuning for each model using GridSearchCV with cross-validation.
+    3. Trains each model with the best hyperparameters on the training data.
+    4. Calculates and stores the R2 score of each model on both the training and test data.
+    5. Returns a dictionary where model names are keys and R2 scores on the test data are values.
     """
     try:
         report = {}
